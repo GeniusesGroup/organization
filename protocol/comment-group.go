@@ -13,6 +13,7 @@ type CommentGroup interface {
 	BlockedWords() []string
 	GetPolicy() CommentGroupPolicy // Visibility level
 	SetPolicy() CommentGroupPolicy
+	ForwardPolicy() CommentGroupPolicy
 	RequestID() [16]byte // user-request domain
 }
 
@@ -23,6 +24,7 @@ const (
 	CommentGroupPolicy_JustOwner
 	CommentGroupPolicy_GroupManagers
 	CommentGroupPolicy_GroupMembers
+	CommentGroupPolicy_Mentioned
 	CommentGroupPolicy_AnyOne
 	// Below policies are person type authorization
 	CommentGroupPolicy_1stFriendshipCycle
@@ -33,7 +35,7 @@ const (
 	CommentGroupPolicy_6stFriendshipCycle
 )
 
-type CommentStorageServices interface {
+type CommentGroupStorageServices interface {
 	Register(c CommentGroup) protocol.Error
 
 	Count(groupID [16]byte) (numbers uint64, err protocol.Error)

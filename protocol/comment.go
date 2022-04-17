@@ -14,6 +14,7 @@ type Comment interface {
 	CommentType() CommentType
 	ReplyTo() [16]byte   // other CommentID. Comment can be reply to other comment in the same group.
 	UserID() [16]byte    // user-status domain
+	Status() CommentStatus
 	RequestID() [16]byte // user-request domain
 }
 
@@ -34,6 +35,15 @@ const (
 	CommentType_Forward // Retweet, Share, ...
 )
 
+type CommentStatus uint8
+
+const (
+	CommentStatus_Unset CommentStatus = iota
+	CommentStatus_Locked
+	CommentStatus_Hidden
+	CommentStatus_Deleted
+)
+
 type CommentStorageServices interface {
 	Register(c Comment) protocol.Error
 
@@ -43,6 +53,7 @@ type CommentStorageServices interface {
 
 	FindByReplyTo(groupID [16]byte, commentID [16]byte, offset, limit uint64) (versionOffsets []uint64, err protocol.Error)
 	FindByUserID(groupID [16]byte, userID [16]byte, offset, limit uint64) (versionOffsets []uint64, err protocol.Error)
+	FindUserGroups(userID [16]byte, offset, limit uint64) (ids [][16]byte, err protocol.Error)
 
 	protocol.EventTarget
 }
