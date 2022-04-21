@@ -11,17 +11,17 @@ import (
 */
 
 type FinancialTransaction interface {
-	AccountID() [16]byte            // bank-account ||  domain
-	AccountSideID() [16]byte        // or AccountPartyID
-	Reference() [16]byte            // Any ID that user can assign to track for any purpose
-	Amount() int64                  // This transaction
-	Balance() int64                 // Account balance with this transaction
-	Type() FinancialTransactionType //
-	Time() protocol.Time            // Set or update time
-	RequestID() [16]byte            // user-request domain
+	AccountID() [16]byte             // bank-account ||  domain
+	AccountSideID() [16]byte         // or AccountPartyID
+	Reference() [16]byte             // Any ID that user can assign to track for any purpose
+	Amount() protocol.AmountOfMoney  // This transaction
+	Balance() protocol.AmountOfMoney // Account balance with this transaction
+	Type() FinancialTransaction_Type //
+	Time() protocol.Time             // Save time
+	RequestID() [16]byte             // user-request domain
 }
 
-type FinancialTransactionStorageServices interface {
+type FinancialTransaction_StorageServices interface {
 	Save(ft FinancialTransaction) (err protocol.Error)
 
 	Count(accountID [16]byte) (numbers uint64, err protocol.Error)
@@ -29,37 +29,37 @@ type FinancialTransactionStorageServices interface {
 	Last(accountID [16]byte) (ft FinancialTransaction, err protocol.Error)
 }
 
-// FinancialTransactionType indicate FinancialTransaction record type
-type FinancialTransactionType uint8
+// FinancialTransaction_Type indicate FinancialTransaction record type
+type FinancialTransaction_Type uint8
 
 // FinancialTransaction types
 const (
-	FinancialTransactionType_Unset  FinancialTransactionType = iota
-	FinancialTransactionType_Failed                          // Refund for any reason e.g. not same currency account, not reachable bank, ...
-	FinancialTransactionType_Blocked
-	FinancialTransactionType_Exchange
-	FinancialTransactionType_Prize
-	FinancialTransactionType_Donate
-	FinancialTransactionType_Charity
-	FinancialTransactionType_Tip
-	FinancialTransactionType_Cash          // >> Due to digital era banking, prefer to not support cash transactions
-	FinancialTransactionType_RevolvingFund // >> Due to digital era banking, prefer to not support this type
-	// FinancialTransactionType_SameBankTransfer     >> Not the goal and just the way of transaction that can check by RequestID
-	// FinancialTransactionType_ForeignBankTransfer  >> Not the goal and just the way of transaction that can check by RequestID
-	// FinancialTransactionType_POSTransfer          >> Not the goal and just the way of transaction that can check by RequestID
-	// FinancialTransactionType_WebTransfer          >> Not the goal and just the way of transaction that can check by RequestID
-	FinancialTransactionType_Asset
-	FinancialTransactionType_Stock
-	FinancialTransactionType_RentalFee
-	FinancialTransactionType_Bill
-	FinancialTransactionType_Invoice
-	FinancialTransactionType_ReturnInvoice
-	FinancialTransactionType_Tax
-	FinancialTransactionType_Commission
-	FinancialTransactionType_Salary // Reward
-	FinancialTransactionType_Profit
-	FinancialTransactionType_Loan
-	FinancialTransactionType_BadDebt // Debt default
-	FinancialTransactionType_Installment
-	FinancialTransactionType_Compensation
+	FinancialTransaction_Type_Unset  FinancialTransaction_Type = iota
+	FinancialTransaction_Type_Failed                           // Refund for any reason e.g. not same currency account, not reachable bank, ...
+	FinancialTransaction_Type_Blocked
+	FinancialTransaction_Type_Exchange
+	FinancialTransaction_Type_Prize
+	FinancialTransaction_Type_Donate
+	FinancialTransaction_Type_Charity
+	FinancialTransaction_Type_Tip
+	FinancialTransaction_Type_Cash          // >> Due to digital era banking, prefer to not support cash transactions
+	FinancialTransaction_Type_RevolvingFund // >> Due to digital era banking, prefer to not support this type
+	// FinancialTransaction_Type_SameBankTransfer     >> Not the goal and just the way of transaction that can check by RequestID
+	// FinancialTransaction_Type_ForeignBankTransfer  >> Not the goal and just the way of transaction that can check by RequestID
+	// FinancialTransaction_Type_POSTransfer          >> Not the goal and just the way of transaction that can check by RequestID
+	// FinancialTransaction_Type_WebTransfer          >> Not the goal and just the way of transaction that can check by RequestID
+	FinancialTransaction_Type_Asset
+	FinancialTransaction_Type_Stock
+	FinancialTransaction_Type_RentalFee
+	FinancialTransaction_Type_Bill
+	FinancialTransaction_Type_Invoice
+	FinancialTransaction_Type_ReturnInvoice
+	FinancialTransaction_Type_Tax
+	FinancialTransaction_Type_Commission
+	FinancialTransaction_Type_Salary // Reward
+	FinancialTransaction_Type_Profit
+	FinancialTransaction_Type_Loan
+	FinancialTransaction_Type_BadDebt // Debt default
+	FinancialTransaction_Type_Installment
+	FinancialTransaction_Type_Compensation
 )
