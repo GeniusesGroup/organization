@@ -8,8 +8,9 @@ import (
 
 // CommentThread indicate the comment-thread domain record data fields.
 type CommentThread interface {
-	CommentID() [16]byte // comment domain
-	Name() string
-	ArchiveAfter() protocol.Duration
-	RequestID() [16]byte // user-request domain
+	CommentID() [16]byte             // comment domain
+	Name() string                    //
+	ArchiveAfter() protocol.Duration //
+	Time() protocol.Time             // Save time
+	RequestID() [16]byte             // user-request domain
 }
