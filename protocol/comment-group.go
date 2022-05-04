@@ -8,39 +8,40 @@ import (
 
 // CommentGroup indicate the comment-group domain record data fields.
 type CommentGroup interface {
-	GroupID() [16]byte                 // or ChannelID. Use to store and retrieve comments in time order. It can be UUID, URL hash or any random id.
-	OwnerUserID() [16]byte             // user-status domain
-	BlockedWords() []string            //
-	GetPolicy() CommentGroupPolicy     // Visibility level
-	SetPolicy() CommentGroupPolicy     //
-	ForwardPolicy() CommentGroupPolicy //
-	Time() protocol.Time               // Save time
-	RequestID() [16]byte               // user-request domain
+	GroupID() [16]byte                  // or ChannelID. Use to store and retrieve comments in time order. It can be UUID, URL hash or any random id.
+	OwnerUserID() [16]byte              // user-status domain
+	BlockedWords() []string             //
+	GetPolicy() CommentGroup_Policy     // Visibility level
+	SetPolicy() CommentGroup_Policy     //
+	ForwardPolicy() CommentGroup_Policy //
+	Time() protocol.Time                // Save time
+	RequestID() [16]byte                // user-request domain
 }
 
-type CommentGroupPolicy uint8
+type CommentGroup_Policy uint16
 
 const (
-	CommentGroupPolicy_Unset CommentGroupPolicy = iota
-	CommentGroupPolicy_JustOwner
-	CommentGroupPolicy_GroupManagers
-	CommentGroupPolicy_GroupMembers
-	CommentGroupPolicy_Mentioned
-	CommentGroupPolicy_AnyOne
+	CommentGroup_Policy_Unset     CommentGroup_Policy = 0
+	CommentGroup_Policy_JustOwner CommentGroup_Policy = (1 << iota)
+	CommentGroup_Policy_GroupManagers
+	CommentGroup_Policy_GroupMembers
+	CommentGroup_Policy_Mentioned
+	CommentGroup_Policy_AnyOne
 	// Below policies are person type authorization
-	CommentGroupPolicy_1stFriendshipCycle
-	CommentGroupPolicy_2stFriendshipCycle
-	CommentGroupPolicy_3stFriendshipCycle
-	CommentGroupPolicy_4stFriendshipCycle
-	CommentGroupPolicy_5stFriendshipCycle
-	CommentGroupPolicy_6stFriendshipCycle
+	CommentGroup_Policy_1stFriendshipCycle
+	CommentGroup_Policy_2stFriendshipCycle
+	CommentGroup_Policy_3stFriendshipCycle
+	CommentGroup_Policy_4stFriendshipCycle
+	CommentGroup_Policy_5stFriendshipCycle
+	CommentGroup_Policy_6stFriendshipCycle
 )
 
 type CommentGroupStorageServices interface {
-	Save(c CommentGroup) protocol.Error
+	Save(cg CommentGroup) protocol.Error
 
 	Count(groupID [16]byte) (numbers uint64, err protocol.Error)
-	Get(groupID [16]byte, versionOffset uint64) (c CommentGroup, err protocol.Error)
+	Get(groupID [16]byte, versionOffset uint64) (cg CommentGroup, err protocol.Error)
+	Last(groupID [16]byte) (cg CommentGroup, numbers uint64, err protocol.Error)
 
-	FindByUserID(userID [16]byte, offset, limit uint64) (ids [][16]byte, numbers uint64, err protocol.Error)
+	FindByUserID(ownerUserID [16]byte, offset, limit uint64) (ids [][16]byte, numbers uint64, err protocol.Error)
 }

@@ -10,7 +10,6 @@ import (
 type CommentText interface {
 	CommentID() [16]byte // comment domain
 	Text() string        // Text With Style. HTML & CSS (No JS) is more expressive than markdown, suggest use them in article text to style text.
-	Preview() bool       // Render web links as small widget or not
 	Time() protocol.Time // Save time
 	RequestID() [16]byte // user-request domain
 }
@@ -20,7 +19,5 @@ type CommentTextStorageServices interface {
 
 	Count(commentID [16]byte) (numbers uint64, err protocol.Error)
 	Get(commentID [16]byte, versionOffset uint64) (c CommentText, err protocol.Error)
-	Last(commentID [16]byte) (c CommentText, err protocol.Error)
-
-	protocol.EventTarget
+	Last(commentID [16]byte) (c CommentText, numbers uint64, err protocol.Error)
 }

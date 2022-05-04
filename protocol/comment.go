@@ -9,13 +9,14 @@ import (
 // Comment indicate the comment domain record data fields.
 // each comment is immutable record and so use version mechanism to chain comments in a group.
 type Comment interface {
-	CommentGroupID() [16]byte // comment-group domain.
-	CommentID() [16]byte      //
-	ReplyTo() [16]byte        // other CommentID. Comment can be reply to other comment in the same group.
-	UserID() [16]byte         // user-status domain
-	Type() Comment_Type       //
-	Time() protocol.Time      // Save time
-	RequestID() [16]byte      // user-request domain
+	CommentGroupID() [16]byte   // comment-group domain.
+	CommentID() [16]byte        //
+	ReplyTo() [16]byte          // other CommentID. Comment can be reply to other comment in the same group.
+	UserID() [16]byte           // user-status domain
+	Type() Comment_Type         //
+	Settings() Comment_Settings //
+	Time() protocol.Time        // Save time
+	RequestID() [16]byte        // user-request domain
 }
 
 type Comment_StorageServices interface {
@@ -33,11 +34,11 @@ type Comment_StorageServices interface {
 	protocol.EventTarget
 }
 
-type Comment_Type uint8
+type Comment_Type uint16
 
 const (
-	Comment_Type_Unset Comment_Type = iota
-	Comment_Type_Text
+	Comment_Type_Unset Comment_Type = 0
+	Comment_Type_Text  Comment_Type = (1 << iota)
 	Comment_Type_Voice
 	Comment_Type_Call
 	Comment_Type_File
@@ -46,8 +47,21 @@ const (
 	Comment_Type_Video
 	Comment_Type_Album
 
+	Comment_Type_Welcome
+	Comment_Type_PhotoUpdated
+
+	Comment_Type_Product
+
 	Comment_Type_Thread
 	Comment_Type_Forward // Retweet, Share, ...
 
 	Comment_Type_NewConnection // made-friend, new-follower,
+)
+
+type Comment_Settings uint16
+
+const (
+	Comment_Settings_Unset        Comment_Settings = 0
+	Comment_Settings_PreviewLinks Comment_Settings = (1 << iota) // Render web links as small widget or not
+	Comment_Settings_Forwardable                                 // Allow to forward it
 )
