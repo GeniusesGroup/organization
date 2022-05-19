@@ -7,7 +7,7 @@ import (
 )
 
 type InvoiceVoucher interface {
-	InvoiceID() [16]byte                // invoice domain
+	InvoiceID() [16]byte                // invoice-status domain
 	VoucherID() [16]byte                // voucher domain
 	Discounted() protocol.AmountOfMoney //
 	Time() protocol.Time                // Save time

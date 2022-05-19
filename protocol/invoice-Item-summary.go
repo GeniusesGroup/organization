@@ -6,10 +6,10 @@ import (
 	"../libgo/protocol"
 )
 
-// InvoiceItemSummary indicate the invoice-item-summary domain record data fields.
+// InvoiceItemSummary indicate the domain record data fields.
 type InvoiceItemSummary interface {
-	InvoiceID() [16]byte                     // invoice domain
-	QuiddityID() [16]byte                    // product domain
+	InvoiceID() [16]byte                     // invoice-status domain
+	ProductID() [16]byte                     // product-status domain
 	SuggestedPrice() protocol.AmountOfMoney  // Total should pay before any discount or auction
 	DiscountedPrice() protocol.AmountOfMoney // user profit from this product purchase by auctions
 	PayablePrice() protocol.AmountOfMoney    // Total price user pay to organization
