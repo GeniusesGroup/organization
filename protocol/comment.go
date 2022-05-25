@@ -9,7 +9,7 @@ import (
 // Comment indicate the comment domain record data fields.
 // each comment is immutable record and so use version mechanism to chain comments in a group.
 type Comment interface {
-	CommentGroupID() [16]byte   // comment-group domain.
+	GroupID() [16]byte          // group domain
 	CommentID() [16]byte        //
 	ReplyTo() [16]byte          // other CommentID. Comment can be reply to other comment in the same group.
 	UserID() [16]byte           // user-status domain
@@ -22,19 +22,19 @@ type Comment interface {
 type Comment_StorageServices interface {
 	Save(c Comment) protocol.Error
 
-	Count(commentGroupID [16]byte) (numbers uint64, err protocol.Error)
-	Get(commentGroupID [16]byte, versionOffset uint64) (c Comment, err protocol.Error)
-	Last(commentGroupID [16]byte) (c Comment, numbers uint64, err protocol.Error)
+	Count(groupID [16]byte) (numbers uint64, err protocol.Error)
+	Get(groupID [16]byte, versionOffset uint64) (c Comment, err protocol.Error)
+	Last(groupID [16]byte) (c Comment, numbers uint64, err protocol.Error)
 
-	FindByReplyTo(commentGroupID [16]byte, commentID [16]byte, offset, limit uint64) (versionOffsets []uint64, numbers uint64, err protocol.Error)
-	FindByUserID(commentGroupID [16]byte, userID [16]byte, offset, limit uint64) (versionOffsets []uint64, numbers uint64, err protocol.Error)
+	FindByReplyTo(groupID [16]byte, commentID [16]byte, offset, limit uint64) (versionOffsets []uint64, numbers uint64, err protocol.Error)
+	FindByUserID(groupID [16]byte, userID [16]byte, offset, limit uint64) (versionOffsets []uint64, numbers uint64, err protocol.Error)
 
 	ListUserGroups(userID [16]byte, offset, limit uint64) (ids [][16]byte, numbers uint64, err protocol.Error)
 
 	protocol.EventTarget
 }
 
-type Comment_Type uint16
+type Comment_Type uint32
 
 const (
 	Comment_Type_Unset Comment_Type = 0
@@ -47,18 +47,19 @@ const (
 	Comment_Type_Video
 	Comment_Type_Album
 
+	Comment_Type_Pin
 	Comment_Type_Welcome
 	Comment_Type_PhotoUpdated
+	Comment_Type_NewConnection // made-friend, new-follower,
 
+	Comment_Type_Map // location
 	Comment_Type_Product
 
-	Comment_Type_Thread
+	Comment_Type_Thread  // Thread name will save in comment-text
 	Comment_Type_Forward // Retweet, Share, ...
-
-	Comment_Type_NewConnection // made-friend, new-follower,
 )
 
-type Comment_Settings uint16
+type Comment_Settings uint32
 
 const (
 	Comment_Settings_Unset        Comment_Settings = 0

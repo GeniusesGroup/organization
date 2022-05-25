@@ -6,12 +6,12 @@ import (
 	"../libgo/protocol"
 )
 
-// CommentStatus indicate the comment-status domain record data fields.
+// CommentStatus indicate the domain record data fields.
 type CommentStatus interface {
-	CommentID() [16]byte          // comment domain
-	Status() CommentStatus_Status //
-	Time() protocol.Time          // Save time
-	RequestID() [16]byte          // user-request domain
+	CommentID() [16]byte    // comment domain
+	Status() Comment_Status //
+	Time() protocol.Time    // Save time
+	RequestID() [16]byte    // user-request domain
 }
 
 type CommentStatus_StorageServices interface {
@@ -24,14 +24,14 @@ type CommentStatus_StorageServices interface {
 	protocol.EventTarget
 }
 
-type CommentStatus_Status uint8
+type Comment_Status uint8
 
 const (
-	CommentStatus_Status_Unset   CommentStatus_Status = 0
-	CommentStatus_Status_Created CommentStatus_Status = (1 << iota)
-	CommentStatus_Status_Edited
-	CommentStatus_Status_Locked
-	CommentStatus_Status_Hidden
-	CommentStatus_Status_Deleted
-	CommentStatus_Status_Blocked
+	Comment_Status_Unset   Comment_Status = 0
+	Comment_Status_Created Comment_Status = (1 << iota)
+	Comment_Status_Edited
+	Comment_Status_Locked
+	Comment_Status_Hidden // use also for unpin a comment
+	Comment_Status_Deleted
+	Comment_Status_Blocked
 )
