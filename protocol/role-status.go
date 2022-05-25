@@ -6,7 +6,7 @@ import (
 	"../libgo/protocol"
 )
 
-// Role indicate the role-status domain record data fields.
+// Role indicate the domain record data fields.
 type RoleStatus interface {
 	RoleID() [16]byte    // role domain
 	Status() Role_Status //
@@ -19,17 +19,15 @@ type RoleStatus_StorageServices interface {
 
 	Count(roleID [16]byte) (numbers uint64, err protocol.Error)
 	Get(roleID [16]byte, versionOffset uint64) (rs RoleStatus, err protocol.Error)
-	Last(roleID [16]byte) (rs RoleStatus, err protocol.Error)
+	Last(roleID [16]byte) (rs RoleStatus, numbers uint64, err protocol.Error)
 }
 
 type Role_Status uint8
 
 const (
-	Role_Status_Unset Role_Status = iota
-	Role_Status_Active
-	Role_Status_Inactive
-	Role_Status_Deleted
-	Role_Status_Revoked
-
+	Role_Status_Unset                Role_Status = 0
+	Role_Status_PermanentInactivated Role_Status = (1 << iota)
+	Role_Status_TemporaryInactivated
+	Role_Status_Blocked
 	Role_Status_JobOpening
 )
