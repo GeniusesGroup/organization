@@ -2,32 +2,27 @@
 
 package org
 
-import (
-	"../libgo/protocol"
-)
+// Quiddity_Status indicate any quiddity record status
+type Quiddity_Status uint64
 
-type QuiddityStatus interface {
-	QuiddityID() [16]byte    // Unique content ID
-	Status() Quiddity_Status //
-	Time() protocol.Time     // Save time
-	RequestID() [16]byte     // user-request domain
-}
-
-type Quiddity_StorageServices interface {
-	Save(qs QuiddityStatus) (err protocol.Error)
-
-	Count(quiddityID [16]byte) (numbers uint64, err protocol.Error)
-	Get(quiddityID [16]byte, versionOffset uint64) (qs QuiddityStatus, err protocol.Error)
-	Last(quiddityID [16]byte) (qs QuiddityStatus, err protocol.Error)
-}
-
-// Quiddity_Status indicate Quiddity record status
-type Quiddity_Status uint8
-
-// Quiddity status
+// base quiddity status
 const (
-	Quiddity_Status_Unset = iota
-	Quiddity_Status_Registered
-	Quiddity_Status_UnRegistered
-	Quiddity_Status_Blocked
+	Quiddity_Status_Unset                Quiddity_Status = 0
+	Quiddity_Status_Edited               Quiddity_Status = (1 << iota)
+	Quiddity_Status_Locked                               // by owner
+	Quiddity_Status_Blocked                              // by justice(admins)
+	Quiddity_Status_PermanentInactivated                 // Due to some reason quiddity was Locked, Closed, ... and must not use or edit
+	Quiddity_Status_TemporaryInactivated
+	Quiddity_Status_Hidden
+	Quiddity_Status_Deleted
+	_
+	_
+	_
+	_
+	_
+	_
+	_
+	_
+	_
+	Quiddity_Status_FreeFlag
 )
