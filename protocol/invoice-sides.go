@@ -8,10 +8,11 @@ import (
 
 // InvoiceSides indicate the domain record data fields.
 type InvoiceSides interface {
-	InvoiceID() [16]byte  // invoice-status domain
-	SellerID() [16]byte   // user-status domain
-	CustomerID() [16]byte // user-status domain
-	Time() protocol.Time  // Save time
+	InvoiceID() [16]byte  // invoice domain
+	SellerID() [16]byte   // user domain
+	CustomerID() [16]byte // user domain
+	AgentID() [16]byte    // user domain
+	Time() protocol.Time  // save time
 	RequestID() [16]byte  // user-request domain
 }
 

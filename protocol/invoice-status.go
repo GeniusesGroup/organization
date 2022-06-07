@@ -7,11 +7,10 @@ import (
 )
 
 // InvoiceStatus indicate the domain record data fields.
-// Also usually known as shopping-cart, ... in GUI part of applications
 type InvoiceStatus interface {
 	InvoiceID() [16]byte    // invoice-status domain
 	Status() Invoice_Status //
-	Time() protocol.Time    // Save time
+	Time() protocol.Time    // save time
 	RequestID() [16]byte    // user-request domain
 }
 
@@ -22,23 +21,19 @@ type InvoiceStatus_StorageServices interface {
 	Get(invoiceID [16]byte, versionOffset uint64) (is InvoiceStatus, err protocol.Error)
 	Last(invoiceID [16]byte) (is InvoiceStatus, numbers uint64, err protocol.Error)
 
-	// GetIDsByDateTime(time protocol.Time, offset, limit uint64) (ids [][16]byte, numbers uint64, err protocol.Error)
+	FindByStatus(status Invoice_Status, offset, limit uint64) (invoiceIDs [][16]byte, numbers uint64, err protocol.Error)
 
-	FindByStatus(offset, limit uint64) (invoiceIDs [][16]byte, numbers uint64, err protocol.Error)
+	protocol.EventTarget
 }
 
-type Invoice_Status uint8
+type Invoice_Status Quiddity_Status
 
 const (
-	Invoice_Status_Unset Invoice_Status = iota // or Draft
-	Invoice_Status_Blocked
-	// deleted : This state indicates that the invoice has been deleted.
-	// You can only delete an invoice in the draft state and not in any other state.
-	Invoice_Status_Hidden // use for Deleted
 	// cancelled : Indicates that you have cancelled the invoice. Though you can view the cancelled invoice,
 	// the customer cannot view the invoice or make payments against the invoice.
 	// You can only cancel an unpaid issued invoice.
-	Invoice_Status_Voided // invoice is no longer valid, and not payable by client or refund
+	// invoice is no longer valid, and not payable by client or refund
+	Invoice_Status_Voided = Invoice_Status(Quiddity_Status_FreeFlag << iota)
 
 	// expired : Indicates that an invoice has expired. Once expired,
 	// the customer cannot make any payments against the invoice,
@@ -54,7 +49,11 @@ const (
 	// Paid is the final state of an invoice. A paid invoice can only be viewed.
 	// You can neither delete nor cancel it.
 	Invoice_Status_Paid
-	Invoice_Status_Committed
+
+	Invoice_Status_UserCheckout
 	Invoice_Status_PendingReview
 	Invoice_Status_Confirmed // Approved
+	Invoice_Status_Packaging
+	Invoice_Status_Shipping
+	Invoice_Status_Done // delivered or served
 )
