@@ -1,16 +1,25 @@
 /* For license and copyright information please see LEGAL file in repository */
 
-package protocol
+package org
 
 import (
 	"../libgo/protocol"
+	"../libgo/time/earth"
 	"../libgo/time/utc"
 )
 
+// DiscountTimingUTC indicate the domain record data fields.
 type DiscountTimingUTC interface {
-	DiscountID() [16]byte   // discount domain
-	Weekdays() utc.Weekdays // what days in weekday in utc time week allow to use this discount
-	DayHours() utc.DayHours // what hours in day in utc time week allow to use this discount
-	Time() protocol.Time    // Save time
-	RequestID() [16]byte    // user-request domain
+	DiscountID() [16]byte     // discount domain
+	Weekdays() utc.Weekdays   // what days in weekday in utc time week allow to use this discount
+	DayHours() earth.DayHours // what hours in day in utc time week allow to use this discount
+	Time() protocol.Time      // save time
+	RequestID() [16]byte      // user-request domain
+}
+
+type DiscountTimingUTC_StorageServices interface {
+	Save(dt DiscountTimingUTC) (numbers uint64, err protocol.Error)
+
+	Count(discountID [16]byte) (numbers uint64, err protocol.Error)
+	Get(discountID [16]byte, versionOffset uint64) (dt DiscountTimingUTC, numbers uint64, err protocol.Error)
 }
