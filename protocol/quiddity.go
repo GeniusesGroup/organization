@@ -18,13 +18,18 @@ type Quiddity_StorageServices interface {
 	Save(q Quiddity) (err protocol.Error)
 
 	Get(quiddityID [16]byte) (q Quiddity, err protocol.Error)
-
-	// FindByDomainID(domainID [16]byte, offset, limit uint64) (quiddityIDs [][16]byte, numbers uint64, err protocol.Error)
 }
 
-type Quiddity_Service_Get_Request interface {
-	QuiddityID() [16]byte
-}
-type Quiddity_Service_Get_Response interface {
-	Quiddity
-}
+type (
+	Quiddity_Service_Get_Request interface {
+		QuiddityID() [16]byte
+	}
+	Quiddity_Service_Get_Response = Quiddity
+)
+
+type (
+	Quiddity_Service_Register_Request interface {
+		QuiddityID() [16]byte
+		DomainID() [16]byte
+	}
+)
